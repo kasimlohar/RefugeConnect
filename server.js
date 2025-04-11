@@ -1,11 +1,14 @@
 const express = require('express');
 const path = require('path');
+const chatbotRoutes = require('./routes/chatbotRoutes');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 // Add middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(cookieParser());
 app.set('view engine', 'ejs');
 
 // Mock database for chat messages
@@ -146,77 +149,47 @@ const helpCenterData = {
     ]
 };
 
-// Add language selection mock data
+// Language selection mock data
 const languages = [
-    {
-        code: 'en',
-        englishName: 'English',
-        nativeName: 'English',
-        icon: 'fas fa-flag-usa'
-    },
-    {
-        code: 'ar',
-        englishName: 'Arabic',
-        nativeName: 'العربية',
-        icon: 'fas fa-mosque'
-    },
-    {
-        code: 'es',
-        englishName: 'Spanish',
-        nativeName: 'Español',
-        icon: 'fas fa-sun'
-    },
-    {
-        code: 'fr',
-        englishName: 'French',
-        nativeName: 'Français',
-        icon: 'fas fa-landmark'
-    },
-    {
-        code: 'fa',
-        englishName: 'Persian',
-        nativeName: 'فارسی',
-        icon: 'fas fa-star-and-crescent'
-    },
-    {
-        code: 'tr',
-        englishName: 'Turkish',
-        nativeName: 'Türkçe',
-        icon: 'fas fa-moon'
-    },
-    {
-        code: 'ur',
-        englishName: 'Urdu',
-        nativeName: 'اردو',
-        icon: 'fas fa-star'
-    },
-    {
-        code: 'ps',
-        englishName: 'Pashto',
-        nativeName: 'پښتو',
-        icon: 'fas fa-mountain'
-    }
+    { code: 'en', englishName: 'English', nativeName: 'English', icon: 'fas fa-flag-usa' },
+    { code: 'ar', englishName: 'Arabic', nativeName: 'العربية', icon: 'fas fa-mosque' },
+    { code: 'es', englishName: 'Spanish', nativeName: 'Español', icon: 'fas fa-sun' },
+    { code: 'hi', englishName: 'Hindi', nativeName: 'हिन्दी', icon: 'fas fa-flag' }
 ];
+
+// Middleware to set language
+app.use((req, res, next) => {
+    const langCode = req.cookies.language || 'en';
+    try {
+        const translations = require(`./locales/${langCode}.json`);
+        res.locals.translations = translations;
+    } catch (error) {
+        console.error(`Missing translation file for language: ${langCode}. Falling back to English.`);
+        res.locals.translations = require('./locales/en.json');
+    }
+    res.locals.languages = languages;
+    next();
+});
 
 // Routes
 app.get('/', (req, res) => {
     res.render('index', { 
-        title: 'RefugeConnect - Welcome'
+        title: res.locals.translations.title
     });
 });
 
-app.get('/chat', (req, res) => {
-    res.render('chatbot', { 
-        title: 'RefugeConnect - Chat Assistant',
-        commonQuestions: [
-            'How to find housing?',
-            'Job opportunities',
-            'Healthcare access',
-            'Education resources'
-        ],
-        chatHistory: chatHistory
-    });
-});
+// app.get('/chat', (req, res) => {
+//     res.render('chatbot', { 
+//         title: 'RefugeConnect - Chat Assistant',
+//         commonQuestions: [
+//             'How to find housing?',
+//             'Job opportunities',
+//             'Healthcare access',
+//             'Education resources'
+//         ],
+//         chatHistory: chatHistory
+//     });
+// });
 
 // Add signup route
 app.get('/signup', (req, res) => {
@@ -260,11 +233,11 @@ app.get('/property/:id', (req, res) => {
 app.get('/settings', (req, res) => {
     res.render('accountSettings', {
         user: {
-            name: 'Sarah Ahmed',
-            firstName: 'Sarah',
-            lastName: 'Ahmed',
-            email: 'sarah@example.com',
-            phone: '+1234567890',
+            name: 'Kasim Lohar',
+            firstName: 'Kasim',
+            lastName: 'Lohar',
+            email: 'Kasimlohar@gmail.com',
+            phone: '+1234567900',
             avatar: 'https://via.placeholder.com/32'
         }
     });
@@ -287,14 +260,16 @@ app.get('/help', (req, res) => {
 // Add language selection route
 app.get('/language', (req, res) => {
     res.render('languageSelection', {
-        languages: languages
+        title: 'Choose Language'
     });
 });
 
 // Handle language selection
 app.get('/set-language/:code', (req, res) => {
     const langCode = req.params.code;
-    // TODO: Set language in session/cookie
+    if (languages.some(lang => lang.code === langCode)) {
+        res.cookie('language', langCode, { maxAge: 900000, httpOnly: true });
+    }
     res.redirect(req.get('referer') || '/');
 });
 
@@ -305,41 +280,44 @@ app.post('/api/support', (req, res) => {
 });
 
 // API Routes
-app.post('/api/chat', (req, res) => {
-    const { message } = req.body;
+// app.post('/api/chat', (req, res) => {
+//     const { message } = req.body;
     
-    if (!message) {
-        return res.status(400).json({ 
-            success: false, 
-            error: 'Message is required' 
-        });
-    }
+//     if (!message) {
+//         return res.status(400).json({ 
+//             success: false, 
+//             error: 'Message is required' 
+//         });
+//     }
     
-    try {
-        // Store user message
-        chatHistory.push({
-            type: 'user',
-            content: message,
-            timestamp: new Date()
-        });
+//     try {
+//         // Store user message
+//         chatHistory.push({
+//             type: 'user',
+//             content: message,
+//             timestamp: new Date()
+//         });
         
-        // Mock assistant response
-        const response = generateResponse(message);
-        chatHistory.push({
-            type: 'assistant',
-            content: response,
-            timestamp: new Date()
-        });
+//         // Mock assistant response
+//         const response = generateResponse(message);
+//         chatHistory.push({
+//             type: 'assistant',
+//             content: response,
+//             timestamp: new Date()
+//         });
 
-        res.json({ success: true, response });
-    } catch (error) {
-        console.error('Chat error:', error);
-        res.status(500).json({ 
-            success: false, 
-            error: 'Internal server error' 
-        });
-    }
-});
+//         res.json({ success: true, response });
+//     } catch (error) {
+//         console.error('Chat error:', error);
+//         res.status(500).json({ 
+//             success: false, 
+//             error: 'Internal server error' 
+//         });
+//     }
+// });
+
+// Use chatbot routes
+app.use('/', chatbotRoutes);
 
 // Helper function for generating responses
 function generateResponse(message) {

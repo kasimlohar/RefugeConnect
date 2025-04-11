@@ -1,3 +1,164 @@
+/* Global Styles */
+body {
+  background-color: #F4F6F8; /* Soft Gray Background */
+  color: #2D2D2D; /* Charcoal Text */
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header / Navbar */
+header, .navbar {
+  background-color: #2C3E50; /* Deep Blue Primary */
+  color: #FFFFFF;
+  padding: 1rem;
+}
+.navbar a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+.navbar a:hover {
+  color: #1ABC9C; /* Teal Accent */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #2C3E50; /* Deep Blue Primary */
+  margin-bottom: 1rem;
+}
+
+/* Paragraphs and Text */
+p {
+  color: #2D2D2D; /* Charcoal Text */
+  line-height: 1.6;
+}
+.text-muted {
+  color: #7F8C8D; /* Slate Gray for Muted Text */
+}
+
+/* Links */
+a {
+  color: #1ABC9C; /* Teal Accent */
+  text-decoration: none;
+}
+a:hover {
+  color: #F39C12; /* Light Orange for Hover */
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #F39C12; /* Light Orange CTA */
+  border: none;
+  color: #FFFFFF;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: #E67E22; /* Slightly darker Light Orange */
+}
+.btn-outline-secondary {
+  background-color: transparent;
+  border: 2px solid #1ABC9C; /* Teal Accent */
+  color: #1ABC9C;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+}
+.btn-outline-secondary:hover {
+  background-color: #1ABC9C; /* Teal Accent */
+  color: #FFFFFF;
+}
+
+/* Cards */
+.card {
+  background-color: #FFFFFF; /* White for Card Background */
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Alerts */
+.alert-success {
+  background-color: #27AE60; /* Soft Green for Success */
+  color: #FFFFFF;
+}
+.alert-danger {
+  background-color: #E74C3C; /* Soft Red for Danger */
+  color: #FFFFFF;
+}
+
+/* Footer */
+footer {
+  background-color: #2C3E50; /* Deep Blue Primary */
+  color: #FFFFFF;
+  padding: 2rem 0;
+}
+footer a {
+  color: #1ABC9C; /* Teal Accent */
+}
+footer a:hover {
+  color: #F39C12; /* Light Orange */
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #2C3E50, #1ABC9C); /* Deep Blue to Teal */
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+}
+.hero h1 {
+  font-size: 2.5rem;
+  color: #FFFFFF; /* White Text */
+}
+.hero p {
+  font-size: 1.2rem;
+  color: #F4F6F8; /* Soft Gray */
+}
+.hero img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+/* Features Section */
+.features i {
+  color: #1ABC9C; /* Teal Accent */
+  transition: transform 0.3s ease;
+}
+.features i:hover {
+  transform: scale(1.1);
+}
+
+/* Forms */
+.form-control:focus {
+  border-color: #1ABC9C; /* Teal Accent */
+  box-shadow: 0 0 0 0.25rem rgba(26, 188, 156, 0.25);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero img {
+    margin-top: 2rem;
+  }
+  .btn-primary, .btn-outline-secondary {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
 /* styles.css: Main stylesheet */
 body {
   font-family: Arial, sans-serif;
@@ -93,4 +254,61 @@ body {
 #signup-form .btn-primary {
     padding: 0.75rem;
     font-weight: 500;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(to right, #2C3E50, #1ABC9C); /* Deep Blue to Teal */
+    color: #FFFFFF;
+    padding: 4rem 0;
+}
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+.hero-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+}
+
+/* Features Section */
+.features {
+    background-color: #FFFFFF;
+}
+.feature-card {
+    background-color: #F4F6F8;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+.feature-icon {
+    font-size: 3rem;
+    color: #1ABC9C;
+    margin-bottom: 1rem;
+}
+
+/* How We Help Section */
+.how-we-help {
+    padding: 4rem 0;
+}
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2C3E50;
+}
+.section-subtitle {
+    font-size: 1.1rem;
+    color: #7F8C8D;
+    margin-bottom: 2rem;
 }

@@ -1,2 +1,7 @@
-# requirements.txt: Python dependencies for chatbot service
 flask
+flask-cors
+transformers
+torch
+langdetect
+deep-translator
+pymongo

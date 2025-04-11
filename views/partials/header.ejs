@@ -1,17 +1,44 @@
 <!-- header.ejs: Common header template -->
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="/">RefugeConnect</a>
-            <div class="ms-auto d-flex align-items-center">
-                <select class="form-select form-select-sm me-3">
-                    <option>English</option>
-                    <option>español</option>
-                    <option>العربية</option>
-                </select>
-                <a href="/login" class="btn btn-outline-primary me-2">Login</a>
-                <a href="/signup" class="btn btn-primary">Sign Up</a>
+<body>
+    <header class="p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container">
+                <!-- Brand Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="/">
+                    <img src="/images/logo.png" alt="RefugeConnect Logo" width="145" height="60" class="me-2">
+                </a>
+
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/help">Help Center</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/language">
+                                <i class="fas fa-globe"></i> Language
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/login" class="btn btn-outline-light me-2">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/signup" class="btn btn-warning text-dark">Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
+</body>

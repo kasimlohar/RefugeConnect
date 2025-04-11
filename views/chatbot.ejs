@@ -1,0 +1,16 @@
+<!-- chatbot.ejs: Chatbot interaction page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <h1>Chatbot</h1>
+  <form id="chat-form">
+    <input type="text" name="message" placeholder="Type your message">
+    <button type="submit">Send</button>
+  </form>
+  <%- include('partials/footer') %>
+</body>
+</html>

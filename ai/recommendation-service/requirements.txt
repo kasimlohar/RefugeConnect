@@ -1,0 +1,3 @@
+# requirements.txt: Python dependencies for recommendation service
+flask
+scikit-learn

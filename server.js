@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const chatbotRoutes = require('./routes/chatbotRoutes');
+const recommendationRoutes = require('./routes/recommendation');
 const app = express();
 
 // Add middleware
@@ -18,18 +20,18 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/chat', (req, res) => {
-    res.render('chatbot', { 
-        title: 'RefugeConnect - Chat Assistant',
-        commonQuestions: [
-            'How to find housing?',
-            'Job opportunities',
-            'Healthcare access',
-            'Education resources'
-        ],
-        chatHistory: chatHistory
-    });
-});
+// app.get('/chat', (req, res) => {
+//     res.render('chatbot', { 
+//         title: 'RefugeConnect - Chat Assistant',
+//         commonQuestions: [
+//             'How to find housing?',
+//             'Job opportunities',
+//             'Healthcare access',
+//             'Education resources'
+//         ],
+//         chatHistory: chatHistory
+//     });
+// });
 
 // Add signup route
 app.get('/signup', (req, res) => {
@@ -45,42 +47,11 @@ app.post('/signup', (req, res) => {
     res.json({ success: true });
 });
 
-// API Routes
-app.post('/api/chat', (req, res) => {
-    const { message } = req.body;
-    
-    if (!message) {
-        return res.status(400).json({ 
-            success: false, 
-            error: 'Message is required' 
-        });
-    }
-    
-    try {
-        // Store user message
-        chatHistory.push({
-            type: 'user',
-            content: message,
-            timestamp: new Date()
-        });
-        
-        // Mock assistant response
-        const response = generateResponse(message);
-        chatHistory.push({
-            type: 'assistant',
-            content: response,
-            timestamp: new Date()
-        });
+// Use chatbot routes
+app.use('/', chatbotRoutes);
 
-        res.json({ success: true, response });
-    } catch (error) {
-        console.error('Chat error:', error);
-        res.status(500).json({ 
-            success: false, 
-            error: 'Internal server error' 
-        });
-    }
-});
+// Use recommendation routes
+app.use('/', recommendationRoutes);
 
 // Helper function for generating responses
 function generateResponse(message) {
@@ -117,5 +88,5 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`); // Debug log
 });

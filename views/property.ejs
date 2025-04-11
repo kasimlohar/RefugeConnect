@@ -74,7 +74,7 @@
                 <div class="row g-2 mb-4">
                     <% property.photos.forEach(photo => { %>
                         <div class="col-3 thumbnail">
-                            <img src="<%= photo %>" alt="" class="img-fluid">
+                            <img src="<%= photo %>" alt="Thumbnail" class="img-fluid">
                         </div>
                     <% }); %>
                 </div>
@@ -120,11 +120,25 @@
                 <div class="mb-4">
                     <h3>Location</h3>
                     <p><i class="fas fa-map-marker-alt me-2"></i><%= property.address %></p>
-                    <div class="map-placeholder rounded" style="height: 300px;">
-                        <!-- Map will be inserted here -->
-                    </div>
+                    <div id="map" class="rounded" style="height: 300px;"></div>
                 </div>
+                <script>
+                    function initMap() {
+                        const propertyLocation = { lat: parseFloat('<%= property.latitude %>'), lng: parseFloat('<%= property.longitude %>') };
+                        const map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 15,
+                            center: propertyLocation,
+                        });
+                        new google.maps.Marker({
+                            position: propertyLocation,
+                            map: map,
+                        });
+                    }
+                </script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
             </div>
+            
+            
 
             <!-- Sidebar -->
             <div class="col-lg-4">
@@ -133,7 +147,7 @@
                     <div class="card-body">
                         <h4 class="card-title h5">Housing Support Team</h4>
                         <div class="d-flex align-items-center mb-3">
-                            <img src="<%= property.agent.photo %>" alt="" class="rounded-circle me-3" width="48">
+                            <img src="<%= property.agent.photo %>" alt="Agent" class="rounded-circle me-3" width="48">
                             <div>
                                 <h5 class="mb-1"><%= property.agent.name %></h5>
                                 <p class="mb-0 text-muted"><%= property.agent.role %></p>
@@ -146,6 +160,28 @@
                         <button class="btn btn-primary w-100">
                             <i class="fas fa-envelope me-2"></i>Contact Provider
                         </button>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title h5">Inquire About This Property</h4>
+                        <form id="contact-form" action="/property/contact" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Your Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Your Email</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Message</label>
+                                <textarea name="message" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Send Inquiry</button>
+                        </form>
                     </div>
                 </div>
             </div>

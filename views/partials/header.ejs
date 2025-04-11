@@ -1,7 +1,7 @@
 <!-- header.ejs: Common header template -->
 <body>
     <header class="p-0">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
             <div class="container">
                 <!-- Brand Logo -->
                 <a class="navbar-brand d-flex align-items-center" href="/">
@@ -17,17 +17,20 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="/about">About</a>
+                            <a class="nav-link <%= activePage === 'home' ? 'active' : '' %>" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="/services">Services</a>
+                            <a class="nav-link <%= activePage === 'about' ? 'active' : '' %>" href="/about">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="/help">Help Center</a>
+                            <a class="nav-link <%= activePage === 'services' ? 'active' : '' %>" href="/services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <%= activePage === 'help' ? 'active' : '' %>" href="/help">Help Center</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/language">
-                                <i class="fas fa-globe"></i> Language
+                                <i class="fas fa-globe"></i> <%= translations.language || 'Language' %>
                             </a>
                         </li>
                         <li class="nav-item">

@@ -3,17 +3,43 @@ const router = express.Router();
 const getChatbotResponse = require('../utils/chatbotClient');
 
 // Render chatbot interface
-router.get('/chatbot', (req, res) => {
+router.get('/chatbot', async (req, res) => {
   console.log('Rendering chatbot interface.'); // Debug log
-  res.render('chatbot', {
-    title: 'RefugeConnect - Chat Assistant',
-    commonQuestions: [
-      'How to find housing?',
-      'Job opportunities',
-      'Healthcare access',
-      'Education resources'
-    ]
-  });
+
+  try {
+    // Fetch conversation history from the database (mock implementation)
+    const conversationHistory = [
+      { sender: 'user', text: 'Hello!' },
+      { sender: 'assistant', text: 'Hi! How can I assist you today?' },
+      { sender: 'user', text: 'I need help finding housing.' },
+      { sender: 'assistant', text: 'Sure! I can help you with that. Do you have a specific location in mind?' }
+    ];
+
+    res.render('chatbot', {
+      title: 'RefugeConnect - Chat Assistant',
+      activePage: 'chatbot', // Define activePage for the chatbot route
+      conversationHistory, // Pass conversationHistory to the template
+      commonQuestions: [
+        'How to find housing?',
+        'Job opportunities',
+        'Healthcare access',
+        'Education resources'
+      ]
+    });
+  } catch (error) {
+    console.error('Error fetching conversation history:', error.message || error);
+    res.render('chatbot', {
+      title: 'RefugeConnect - Chat Assistant',
+      activePage: 'chatbot',
+      conversationHistory: [], // Pass an empty array if there's an error
+      commonQuestions: [
+        'How to find housing?',
+        'Job opportunities',
+        'Healthcare access',
+        'Education resources'
+      ]
+    });
+  }
 });
 
 // Handle chatbot API requests

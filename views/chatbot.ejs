@@ -76,6 +76,7 @@
             padding: 0.75rem 1.5rem;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io@4.5.1/dist/socket.io.min.js"></script>
 </head>
 <body>
     <%- include('partials/header') %>
@@ -90,11 +91,27 @@
 
             <!-- Chat Messages -->
             <div class="chat-messages" id="chat-messages">
-                <div class="message assistant">
-                    <i class="fas fa-robot text-primary"></i>
-                    <div class="message-content">
-                        Hello! I'm your Refugee Assistant. How can I help you today?
+                <% if (conversationHistory && conversationHistory.length) { %>
+                    <% conversationHistory.forEach(message => { %>
+                        <div class="message <%= message.sender === 'user' ? 'user' : 'assistant' %>">
+                            <i class="fas <%= message.sender === 'user' ? 'fa-user text-secondary' : 'fa-robot text-primary' %>"></i>
+                            <div class="message-content">
+                                <%= message.text %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="message assistant">
+                        <i class="fas fa-robot text-primary"></i>
+                        <div class="message-content">
+                            Hello! I'm your Refugee Assistant. How can I help you today?
+                        </div>
                     </div>
+                <% } %>
+            </div>
+            <div id="loading-spinner" class="text-center my-3 d-none">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
 
@@ -115,5 +132,50 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/chat.js"></script>
+    <script>
+        const socket = io();
+
+        // Send message to server
+        $('#chat-form').on('submit', function (e) {
+            e.preventDefault();
+            const userMessage = $('#user-message').val().trim();
+            if (!userMessage) return;
+
+            // Append user message
+            $('#chat-messages').append(`
+                <div class="message user">
+                    <i class="fas fa-user text-secondary"></i>
+                    <div class="message-content">${userMessage}</div>
+                </div>
+            `);
+            $('#user-message').val('');
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+
+            // Emit message to server
+            socket.emit('userMessage', userMessage);
+        });
+
+        // Receive bot response
+        socket.on('botResponse', function (response) {
+            $('#chat-messages').append(`
+                <div class="message assistant">
+                    <i class="fas fa-robot text-primary"></i>
+                    <div class="message-content">${response}</div>
+                </div>
+            `);
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        });
+
+        // Handle errors
+        socket.on('error', function (error) {
+            $('#chat-messages').append(`
+                <div class="message assistant">
+                    <i class="fas fa-robot text-danger"></i>
+                    <div class="message-content">An error occurred. Please try again later.</div>
+                </div>
+            `);
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        });
+    </script>
 </body>
 </html>

@@ -312,3 +312,43 @@ body {
     color: #7F8C8D;
     margin-bottom: 2rem;
 }
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: #E0E0E0;
+}
+.dark-mode .navbar, .dark-mode .footer {
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+}
+.dark-mode .card {
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+}
+.dark-mode a {
+    color: #BB86FC;
+}
+.dark-mode a:hover {
+    color: #03DAC6;
+}
+
+/* Animations */
+.btn, .card {
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+.btn:hover {
+    transform: scale(1.05);
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Accessibility Enhancements */
+a:focus, button:focus {
+    outline: 2px solid #1ABC9C;
+    outline-offset: 2px;
+}
+.navbar a:focus, .footer a:focus {
+    outline: 2px solid #F39C12;
+}

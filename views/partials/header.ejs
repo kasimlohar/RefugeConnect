@@ -1,7 +1,17 @@
 <!-- header.ejs: Common header template -->
 <header>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/chatbot">Chatbot</a>
-  </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="/">RefugeConnect</a>
+            <div class="ms-auto d-flex align-items-center">
+                <select class="form-select form-select-sm me-3">
+                    <option>English</option>
+                    <option>español</option>
+                    <option>العربية</option>
+                </select>
+                <a href="/login" class="btn btn-outline-primary me-2">Login</a>
+                <a href="/signup" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
 </header>

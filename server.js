@@ -11,6 +11,193 @@ app.set('view engine', 'ejs');
 // Mock database for chat messages
 const chatHistory = [];
 
+// Mock data for dashboard
+const mockData = {
+    user: {
+        name: 'John Doe',
+        avatar: 'https://via.placeholder.com/32'
+    },
+    locations: ['New York', 'Los Angeles', 'Chicago', 'Houston'],
+    jobs: [
+        {
+            id: 1,
+            title: 'Restaurant Server',
+            company: 'Local Bistro',
+            location: 'Downtown'
+        },
+        {
+            id: 2,
+            title: 'Warehouse Worker',
+            company: 'LogiCorp',
+            location: 'Industrial District'
+        },
+        {
+            id: 3,
+            title: 'Retail Associate',
+            company: 'MegaMart',
+            location: 'Shopping Center'
+        }
+    ],
+    housing: [
+        {
+            id: 1,
+            type: 'Studio Apartment',
+            price: '$800/month',
+            location: 'City Center'
+        },
+        {
+            id: 2,
+            type: 'Shared Room',
+            price: '$400/month',
+            location: 'University Area'
+        },
+        {
+            id: 3,
+            type: 'Family Home',
+            price: '$1200/month',
+            location: 'Suburbs'
+        }
+    ],
+    healthcare: [
+        {
+            id: 1,
+            name: 'Community Clinic',
+            type: 'General Healthcare',
+            location: 'Downtown'
+        },
+        {
+            id: 2,
+            name: 'Family Medical Center',
+            type: 'Primary Care',
+            location: 'East Side'
+        },
+        {
+            id: 3,
+            name: 'Wellness Center',
+            type: 'Preventive Care',
+            location: 'West Side'
+        }
+    ]
+};
+
+// Add mock property data
+const mockProperty = {
+    id: 1,
+    title: 'Family Apartment in Downtown',
+    price: '$1,200/month',
+    status: 'Available',
+    mainPhoto: 'https://via.placeholder.com/800x500',
+    photos: [
+        'https://via.placeholder.com/200x150',
+        'https://via.placeholder.com/200x150',
+        'https://via.placeholder.com/200x150',
+        'https://via.placeholder.com/200x150'
+    ],
+    bedrooms: 2,
+    bathrooms: 1,
+    area: '950',
+    description: 'Spacious family apartment located in the heart of downtown...',
+    amenities: ['Heating', 'Air Conditioning', 'Furnished', 'Parking'],
+    address: '123 Main St, Downtown',
+    agent: {
+        name: 'Sarah Johnson',
+        role: 'Housing Coordinator',
+        photo: 'https://via.placeholder.com/48'
+    }
+};
+
+// Add help center mock data
+const helpCenterData = {
+    categories: [
+        {
+            title: 'FAQs',
+            icon: 'fas fa-question-circle',
+            description: 'Find answers to common questions',
+            link: '/faqs'
+        },
+        {
+            title: 'Contact Support',
+            icon: 'fas fa-headset',
+            description: 'Get help from our support team',
+            link: '/contact'
+        },
+        {
+            title: 'Tutorials',
+            icon: 'fas fa-book-open',
+            description: 'Learn how to use our services',
+            link: '/tutorials'
+        },
+        {
+            title: 'Community Guidelines',
+            icon: 'fas fa-users',
+            description: 'Understanding our community rules',
+            link: '/guidelines'
+        }
+    ],
+    gettingStarted: [
+        { title: 'Creating your account', link: '/help/create-account' },
+        { title: 'Updating profile', link: '/help/update-profile' },
+        { title: 'Reset password', link: '/help/reset-password' }
+    ],
+    commonIssues: [
+        { title: 'Login problems', link: '/help/login-issues' },
+        { title: 'Payment issues', link: '/help/payment-issues' },
+        { title: 'Access denied', link: '/help/access-issues' }
+    ]
+};
+
+// Add language selection mock data
+const languages = [
+    {
+        code: 'en',
+        englishName: 'English',
+        nativeName: 'English',
+        icon: 'fas fa-flag-usa'
+    },
+    {
+        code: 'ar',
+        englishName: 'Arabic',
+        nativeName: 'العربية',
+        icon: 'fas fa-mosque'
+    },
+    {
+        code: 'es',
+        englishName: 'Spanish',
+        nativeName: 'Español',
+        icon: 'fas fa-sun'
+    },
+    {
+        code: 'fr',
+        englishName: 'French',
+        nativeName: 'Français',
+        icon: 'fas fa-landmark'
+    },
+    {
+        code: 'fa',
+        englishName: 'Persian',
+        nativeName: 'فارسی',
+        icon: 'fas fa-star-and-crescent'
+    },
+    {
+        code: 'tr',
+        englishName: 'Turkish',
+        nativeName: 'Türkçe',
+        icon: 'fas fa-moon'
+    },
+    {
+        code: 'ur',
+        englishName: 'Urdu',
+        nativeName: 'اردو',
+        icon: 'fas fa-star'
+    },
+    {
+        code: 'ps',
+        englishName: 'Pashto',
+        nativeName: 'پښتو',
+        icon: 'fas fa-mountain'
+    }
+];
+
 // Routes
 app.get('/', (req, res) => {
     res.render('index', { 
@@ -42,6 +229,78 @@ app.get('/signup', (req, res) => {
 app.post('/signup', (req, res) => {
     const { name, email, password } = req.body;
     // TODO: Add actual signup logic
+    res.json({ success: true });
+});
+
+// Add dashboard route
+app.get('/dashboard', (req, res) => {
+    res.render('dashboard', { 
+        title: 'Dashboard',
+        user: mockData.user,
+        locations: mockData.locations,
+        jobs: mockData.jobs,
+        housing: mockData.housing,
+        healthcare: mockData.healthcare
+    });
+});
+
+// Add property route
+app.get('/property/:id', (req, res) => {
+    res.render('property', {
+        property: mockProperty,
+        similarProperties: [
+            { id: 2, title: 'Studio Apartment', price: '$800/month', photo: 'https://via.placeholder.com/300x200' },
+            { id: 3, title: 'Shared Room', price: '$400/month', photo: 'https://via.placeholder.com/300x200' },
+            { id: 4, title: 'Family Home', price: '$1,500/month', photo: 'https://via.placeholder.com/300x200' }
+        ]
+    });
+});
+
+// Add account settings route
+app.get('/settings', (req, res) => {
+    res.render('accountSettings', {
+        user: {
+            name: 'Sarah Ahmed',
+            firstName: 'Sarah',
+            lastName: 'Ahmed',
+            email: 'sarah@example.com',
+            phone: '+1234567890',
+            avatar: 'https://via.placeholder.com/32'
+        }
+    });
+});
+
+// Handle settings update
+app.post('/settings', (req, res) => {
+    // TODO: Handle settings update
+    res.json({ success: true });
+});
+
+// Add help center route
+app.get('/help', (req, res) => {
+    res.render('helpCenter', {
+        title: 'Help Center',
+        ...helpCenterData
+    });
+});
+
+// Add language selection route
+app.get('/language', (req, res) => {
+    res.render('languageSelection', {
+        languages: languages
+    });
+});
+
+// Handle language selection
+app.get('/set-language/:code', (req, res) => {
+    const langCode = req.params.code;
+    // TODO: Set language in session/cookie
+    res.redirect(req.get('referer') || '/');
+});
+
+// Handle support form submission
+app.post('/api/support', (req, res) => {
+    // TODO: Handle support form submission
     res.json({ success: true });
 });
 

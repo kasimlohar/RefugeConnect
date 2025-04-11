@@ -2,6 +2,10 @@ const express = require('express');
 const path = require('path');
 const chatbotRoutes = require('./routes/chatbotRoutes');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('./models/User'); // Assuming User model is already created
+const authMiddleware = require('./middleware/authMiddleware'); // Placeholder for role-based access control
 const app = express();
 
 // Add middleware
@@ -279,42 +283,64 @@ app.post('/api/support', (req, res) => {
     res.json({ success: true });
 });
 
-// API Routes
-// app.post('/api/chat', (req, res) => {
-//     const { message } = req.body;
-    
-//     if (!message) {
-//         return res.status(400).json({ 
-//             success: false, 
-//             error: 'Message is required' 
-//         });
-//     }
-    
-//     try {
-//         // Store user message
-//         chatHistory.push({
-//             type: 'user',
-//             content: message,
-//             timestamp: new Date()
-//         });
-        
-//         // Mock assistant response
-//         const response = generateResponse(message);
-//         chatHistory.push({
-//             type: 'assistant',
-//             content: response,
-//             timestamp: new Date()
-//         });
+// User Registration
+app.post('/register', async (req, res) => {
+    const { name, email, phone, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ name, email, phone, password: hashedPassword });
+        await newUser.save();
+        res.status(201).json({ success: true, message: 'User registered successfully' });
+    } catch (error) {
+        console.error('Error during registration:', error);
+        res.status(500).json({ success: false, message: 'Registration failed' });
+    }
+});
 
-//         res.json({ success: true, response });
-//     } catch (error) {
-//         console.error('Chat error:', error);
-//         res.status(500).json({ 
-//             success: false, 
-//             error: 'Internal server error' 
-//         });
-//     }
-// });
+// User Login
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        }
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.cookie('token', token, { httpOnly: true });
+        res.json({ success: true, message: 'Login successful' });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ success: false, message: 'Login failed' });
+    }
+});
+
+// User Logout
+app.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ success: true, message: 'Logout successful' });
+});
+
+// Password Reset
+app.post('/reset-password', async (req, res) => {
+    const { email, newPassword } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+        res.json({ success: true, message: 'Password reset successful' });
+    } catch (error) {
+        console.error('Error during password reset:', error);
+        res.status(500).json({ success: false, message: 'Password reset failed' });
+    }
+});
+
+// Protected Route Example (Role-Based Access Control)
+app.get('/admin', authMiddleware(['admin']), (req, res) => {
+    res.json({ success: true, message: 'Welcome, Admin!' });
+});
 
 // Use chatbot routes
 app.use('/', chatbotRoutes);
